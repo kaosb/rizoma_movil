@@ -52,5 +52,51 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+// .controller('PlaylistCtrl', function($scope, $stateParams) {
+// });
+
+.controller('PlaylistCtrl', ['$scope','$cordovaBarcodeScanner','$ionicPlatform',
+	function($scope,$cordovaBarcodeScanner,$ionicPlatform) {
+		// $scope.scan = function(){
+		// 	$ionicPlatform.ready(function() {
+				$cordovaBarcodeScanner.scan().then(function(barcodeData) {
+					alert(JSON.stringify(barcodeData));
+				}, function(error) {
+					alert(JSON.stringify(error));
+				});
+		// 	});
+		// }
+	}
+]);
+
+// .config(function($stateProvider, $urlRouterProvider){
+//    $stateProvider.state('home',{
+//       url:'/home',
+//       templateUrl: 'views/home.html',
+//       controller: 'HomeCtrl'
+//    });
+//    $urlRouterProvider.otherwise('/home');
+// });
+
+
+// .controller('PlaylistCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
+// 	alert("holi");
+//     // var vm = this;
+//     // vm.scan = function(){
+//     //     $ionicPlatform.ready(function() {
+//     //         $cordovaBarcodeScanner
+//     //             .scan()
+//     //             .then(function(result) {
+//     //                 // Success! Barcode data is here
+//     //                 vm.scanResults = "We got a barcode\n" +
+//     //                 "Result: " + result.text + "\n" +
+//     //                 "Format: " + result.format + "\n" +
+//     //                 "Cancelled: " + result.cancelled;
+//     //             }, function(error) {
+//     //                 // An error occurred
+//     //                 vm.scanResults = 'Error: ' + error;
+//     //             });
+//     //     });
+//     // };
+//     // vm.scanResults = '';
+// });
