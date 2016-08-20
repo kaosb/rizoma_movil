@@ -1,0 +1,9 @@
+<ion-view view-title="Lista de rafagas de escaneo">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="scan in scans" href="#/app/scans/{{scan.id}}">
+        {{scan.title}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
