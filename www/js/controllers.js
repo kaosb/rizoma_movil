@@ -53,8 +53,10 @@ angular.module('starter.controllers', [])
 })
 
 .controller("ScanCtrl", function($scope, $cordovaBarcodeScanner) {
+	$scope.codes = []
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
+			$scope.codes.push(imageData.text);
 			alert(imageData.text);
 			console.log("Barcode Format -> " + imageData.format);
 			console.log("Cancelled -> " + imageData.cancelled);
