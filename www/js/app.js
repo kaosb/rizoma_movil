@@ -42,6 +42,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
     }
   })
 
+  .state('app.new', {
+    url: '/scan',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/scan.html',
+        controller: 'NewScanCtrl'
+      }
+    }
+  })
+
   .state('app.single', {
     url: '/scans/:scanId',
     views: {
