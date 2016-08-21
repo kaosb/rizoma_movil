@@ -41,19 +41,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-// .controller('PlaylistsCtrl', function($scope) {
-//   $scope.playlists = [
-//     { title: 'Reggae', id: 1 },
-//     { title: 'Chill', id: 2 },
-//     { title: 'Dubstep', id: 3 },
-//     { title: 'Indie', id: 4 },
-//     { title: 'Rap', id: 5 },
-//     { title: 'Cowbell', id: 6 }
-//   ];
-// })
-
-// .controller('PlaylistCtrl', function($scope, $stateParams) {
-// });
 .controller('ScansCtrl', function($scope) {
   $scope.scans = [
     { title: 'Cargamento palta', id: 1 },
@@ -65,5 +52,17 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('ScanCtrl', function($scope, $stateParams) {
+.controller("ScanCtrl", function($scope, $cordovaBarcodeScanner) {
+	$scope.scanBarcode = function() {
+		$cordovaBarcodeScanner.scan().then(function(imageData) {
+			alert(imageData.text);
+			console.log("Barcode Format -> " + imageData.format);
+			console.log("Cancelled -> " + imageData.cancelled);
+		}, function(error) {
+			console.log("An error happened -> " + error);
+		});
+	};
 });
+
+// .controller('ScanCtrl', function($scope, $stateParams) {
+// });
