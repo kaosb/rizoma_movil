@@ -5,7 +5,7 @@
         Herramienta para capturar codigos QR para trazabilidad de cargas en rizoma.
     </description>
   <author email="felipe@coddea.com" href="http://www.coddea.com/">
-      Felipe I. González G. 
+      Felipe I. González G.
     </author>
   <content src="index.html"/>
   <access origin="*"/>
