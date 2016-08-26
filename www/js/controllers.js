@@ -38,37 +38,54 @@ angular.module('starter.controllers', [])
 	//   $scope.closeLogin();
 	// }, 1000);
 	var data = {
-	  "user": {
-		"email":  $scope.loginData.username,
-		"password":  $scope.loginData.password
-	  }
+		"email": $scope.loginData.username,
+		"password": $scope.loginData.password
 	}
 	$http({
-		url: "http://app.rizoma.io/users/sign_in",
+		url: "http://app.rizoma.io/api/v1/tokens.json",
 		method: "POST",
 		data: data
 	}).success(function(data, status, headers, config) {
 		alert(status);
-		alert(headers);
-		$scope.data = data;
-		$scope.session = data;
+		alert(data.token);
+		$scope.data = data.token;
+		$scope.session = data.token;
 		$scope.closeLogin();
 	}).error(function(data, status, headers, config) {
 		$scope.status = status;
 		alert("No fue posible autenticarte.");
 	});
   };
+
+
+  $scope.getClients = function(){
+  	alert( $scope.session);
+	$http({
+		url: "http://app.rizoma.io/api/v1/clients.json",
+		method: "GET",
+		data: {'auth_token': $scope.session}
+	}).success(function(data, status) {
+		alert(status);
+		alert(data.session);
+		$scope.scans = data;
+	}).error(function(data, status, headers, config) {
+		$scope.status = status;
+		alert("No fue posible obtener los clientes.");
+	});
+  };
+
 })
 
 .controller('ScansCtrl', function($scope) {
-  $scope.scans = [
-	{ title: 'Cargamento palta', id: 1 },
-	{ title: 'Cargamento manzana', id: 2 },
-	{ title: 'El floral', id: 3 },
-	{ title: 'Mingus', id: 4 },
-	{ title: 'Cargamento x', id: 5 },
-	{ title: 'Cargamento xxx', id: 6 }
-  ];
+	$scope.getClients();
+	// $scope.scans = [
+	// // 	{ title: 'Cargamento palta', id: 1 },
+	// // 	{ title: 'Cargamento manzana', id: 2 },
+	// // 	{ title: 'El floral', id: 3 },
+	// // 	{ title: 'Mingus', id: 4 },
+	// // 	{ title: 'Cargamento x', id: 5 },
+	// // 	{ title: 'Cargamento xxx', id: 6 }
+	// ];
 })
 
 .controller("ScanCtrl", function($scope, $cordovaBarcodeScanner) {
@@ -76,11 +93,11 @@ angular.module('starter.controllers', [])
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
 			$scope.codes.push(imageData.text);
-			alert(imageData.text);
-			console.log("Barcode Format -> " + imageData.format);
-			console.log("Cancelled -> " + imageData.cancelled);
+			// alert(imageData.text);
+			// console.log("Barcode Format -> " + imageData.format);
+			// console.log("Cancelled -> " + imageData.cancelled);
 		}, function(error) {
-			console.log("An error happened -> " + error);
+			// console.log("An error happened -> " + error);
 		});
 	};
 })
