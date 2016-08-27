@@ -59,25 +59,29 @@ angular.module('starter.controllers', [])
 
 
   $scope.getClients = function(){
-  	alert( $scope.session);
-	$http({
-		url: "http://app.rizoma.io/api/v1/clients.json",
-		method: "GET",
-		data: {'auth_token': $scope.session}
-	}).success(function(data, status) {
-		alert(status);
-		alert(data.session);
-		$scope.scans = data;
-	}).error(function(data, status, headers, config) {
-		$scope.status = status;
-		alert("No fue posible obtener los clientes.");
-	});
+  	if($scope.session){
+	  	$http({
+			url: "http://app.rizoma.io/api/v1/clients.json",
+			method: "GET",
+			data: {'auth_token': $scope.session}
+		}).success(function(data, status) {
+			alert(status);
+			alert(data.session);
+			$scope.scans = data;
+			return data;
+		}).error(function(data, status, headers, config) {
+			$scope.status = status;
+			alert("No fue posible obtener los clientes.");
+			return null;
+		});
+  	}
   };
 
 })
 
 .controller('ScansCtrl', function($scope) {
-	$scope.getClients();
+	$scope.scans = $scope.getClients();
+	alert($scope.scans);
 	// $scope.scans = [
 	// // 	{ title: 'Cargamento palta', id: 1 },
 	// // 	{ title: 'Cargamento manzana', id: 2 },
