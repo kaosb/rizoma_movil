@@ -38,28 +38,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngStora
 		controller: 'LoginCtrl'
 	})
 
-	.state('app.scans', {
-		url: '/scans',
-		views: {
-			'menuContent': {
-				templateUrl: 'templates/scans.html',
-				controller: 'ScansCtrl'
-			}
-		}
-	})
-
-	.state('app.new', {
-		url: '/scan',
-		views: {
-			'menuContent': {
-				templateUrl: 'templates/scan.html',
-				controller: 'NewScanCtrl'
-			}
-		}
-	})
-
-	.state('app.single', {
-		url: '/scans/:scanId',
+	.state('app.scan', {
+		url: '/scan/:clientId',
 		views: {
 			'menuContent': {
 				templateUrl: 'templates/scan.html',

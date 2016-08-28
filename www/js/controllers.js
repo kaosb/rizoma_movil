@@ -86,40 +86,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ScansCtrl', function($scope, $ionicModal){
-	// Chequeo la session.
-	$scope.checkSession();
-	// Ejecuto la magia.
-	$scope.clients = $scope.getClients();
-	$scope.scans = [
-		{ title: 'Cargamento palta', id: 1 },
-		{ title: 'Cargamento manzana', id: 2 },
-		{ title: 'El floral', id: 3 },
-		{ title: 'Mingus', id: 4 },
-		{ title: 'Cargamento x', id: 5 },
-		{ title: 'Cargamento xxx', id: 6 }
-	];
-	console.log($scope.scans);
-})
-
 .controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
-	// Chequeo la session.
-	$scope.checkSession();
-	// Ejecuto la magia.
-	$scope.codes = []
-	$scope.scanBarcode = function() {
-		$cordovaBarcodeScanner.scan().then(function(imageData){
-			$scope.codes.push(imageData.text);
-			// alert(imageData.text);
-			// console.log("Barcode Format -> " + imageData.format);
-			// console.log("Cancelled -> " + imageData.cancelled);
-		}, function(error) {
-			// console.log("An error happened -> " + error);
-		});
-	};
-})
-
-.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
@@ -140,10 +107,12 @@ angular.module('starter.controllers', [])
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
-	$scope.getClients();
-	$scope.clients = Array();
-	for(i = 0; i < $scope.session.clients.length; i++){
-		$scope.clients.push({ id: $scope.session.clients[i].id, name: $scope.session.clients[i].name });
+	if($scope.session && $scope.session.clients){
+		$scope.getClients();
+		$scope.clients = Array();
+		for(i = 0; i < $scope.session.clients.length; i++){
+			$scope.clients.push({ id: $scope.session.clients[i].id, name: $scope.session.clients[i].name });
+		}
 	}
 });
 
