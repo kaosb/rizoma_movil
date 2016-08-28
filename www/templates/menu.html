@@ -16,10 +16,10 @@
 		</ion-header-bar>
 		<ion-content>
 			<ion-list >
-				<ion-item ng-if="!session.token" menu-close ng-click="login()">
+				<ion-item ng-if="!storage.token" menu-close ng-click="login()">
 					Identificarse
 				</ion-item>
-				<ion-item ng-if="session.token" menu-close ng-click="deleteSession()">
+				<ion-item ng-if="storage.token" menu-close ng-click="deleteSession()">
 					Salir
 				</ion-item>
 <!-- 				<ion-item menu-close href="#/app/clients">
