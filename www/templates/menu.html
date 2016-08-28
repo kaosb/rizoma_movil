@@ -7,11 +7,6 @@
 				<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
 				</button>
 			</ion-nav-buttons>
-<!-- 			<ion-nav-buttons side="right">
-				<a class="button button-positive" href="#/app/scan">
-					<i class="icon ion-plus-round"></i>
-				</a>
-			</ion-nav-buttons> -->
 		</ion-nav-bar>
 		<ion-nav-view name="menuContent"></ion-nav-view>
 	</ion-side-menu-content>
@@ -22,14 +17,11 @@
 		<ion-content>
 			<ion-list >
 				<ion-item ng-if="!session.token" menu-close ng-click="login()">
-					Login
+					Identificarse
 				</ion-item>
 				<ion-item ng-if="session.token" menu-close ng-click="deleteSession()">
-					Logout
+					Salir
 				</ion-item>
-<!-- 				<ion-item menu-close href="#/app/scans">
-					Scans
-				</ion-item> -->
 			</ion-list>
 		</ion-content>
 	</ion-side-menu>

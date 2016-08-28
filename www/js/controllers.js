@@ -53,11 +53,10 @@ angular.module('starter.controllers', [])
 	// Obtiene los clientes contra el endpoint de rizoma.
 	$scope.getClients = function(){
 		$http({
-			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=6DVWNykMaBkHWjHP8hc3",
+			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=qELVaZPPdpXr-N84hLRq",
 			method: "GET"
 		}).success(function(data, status){
 			$scope.session.clients = data;
-			// console.log($scope.session.clients);
 			return true;
 		}).error(function(data, status, headers, config){
 			console.log("No fue posible obtener los clientes.");
@@ -68,7 +67,7 @@ angular.module('starter.controllers', [])
 	// Verificar Session.
 	$scope.checkSession = function(){
 		if($scope.session.hasOwnProperty("token") && $scope.session.status == 200){
-			console.log($scope.session.token);
+			console.log("Tu token es: "+$scope.session.token);
 			return true;
 		}else{
 			console.log("La session no existe, es necesario autenticar.");

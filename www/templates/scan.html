@@ -1,19 +1,23 @@
-<ion-view view-title="Scan">
+<ion-view view-title="Escaner">
 	<ion-content style="background: #e8ebf1;" class="padding">
 		<div class="card">
 			<div class="item">
 				<button class="button button-block button-positive" ng-click="scanBarcode()">
 					<i class="icon ion-qr-scanner"></i>
-					Scan Now
+					Escanea ahora
 				</button>
 			</div>
 		</div>
 		<div class="card">
 			<div class="item item-divider">
-				Scan group
+				Codigos escaneados
 			</div>
 			<div class="item item-text-wrap">
-				{{codes}}
+				<ul class="list">
+				<li class="item" ng-repeat="code in codes" >
+						<div>{{code}}</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</ion-content>
