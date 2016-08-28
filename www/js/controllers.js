@@ -53,8 +53,9 @@ angular.module('starter.controllers', [])
 
 	// Obtiene los clientes contra el endpoint de rizoma.
 	$scope.getClients = function(){
+		$scope.session.token = "kyqwXT61Hys5xhcd6A6U";
 		$http({
-			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=kyqwXT61Hys5xhcd6A6U",
+			url: "http://app.rizoma.io/api/v1/clients.json?auth_token="+$scope.session.token,
 			method: "GET"
 		}).success(function(data, status){
 			$scope.session.clients = data;
@@ -90,17 +91,47 @@ angular.module('starter.controllers', [])
 	// Chequeo la session.
 	// $scope.checkSession();
 	// Ejecuto la magia.
+	
+	// Array que mantiene los codigos.
 	$scope.codes = []
-	$scope.scanBarcode = function() {
+
+	// Funcion responsable de lanzar el escaner.
+	$scope.scanBarcode = function(){
 		$cordovaBarcodeScanner.scan().then(function(imageData){
-			$scope.codes.push(imageData.text);
-			// alert(imageData.text);
-			// console.log("Barcode Format -> " + imageData.format);
-			// console.log("Cancelled -> " + imageData.cancelled);
+			$scope.session.token = "kyqwXT61Hys5xhcd6A6U";
+			// Verifico si el codigo es valido.
+			$http({
+				url: "http://app.rizoma.io/api/v1/item_group/"+imageData.text+".json?auth_token="+$scope.session.token,
+				method: "GET"
+			}).success(function(data, status){
+				// Al ser valido lo agrego como positivo.
+				$scope.codes.push(imageData.text);
+			}).error(function(data, status, headers, config){
+				console.log("No fue posible validar el codigo capturado.");
+			});
 		}, function(error) {
 			// console.log("An error happened -> " + error);
 		});
 	};
+
+	// Funcion responsable de enviar los codigos al servidor.
+	$scope.sendCodes = function(){
+		$scope.session.token = "kyqwXT61Hys5xhcd6A6U";
+		var data = {
+			"auth_token":$scope.session.token,
+			"transaction_client": "57b9f21a861ca36309000003",
+			"transaction_items_groups": ['57b9f3ef861ca36309000019','57bf3e4f861ca36195000006','57bf3e5f861ca36195000009']
+		}
+		$http({
+			url: "http://app.rizoma.io/api/v1/transactions",
+			method: "POST",
+			data: data
+		}).success(function(data, status, headers, config) {
+			console.log("Se envio de forma exitosa la carga: "+data);
+		}).error(function(data, status, headers, config) {
+			console.log("No se puedo enviar la carga..");
+		});
+	}
 })
 
 .controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){

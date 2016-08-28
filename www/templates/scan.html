@@ -14,10 +14,16 @@
 			</div>
 			<div class="item item-text-wrap">
 				<ul class="list">
-				<li class="item" ng-repeat="code in codes" >
-						<div>{{code}}</div>
+					<li class="item" ng-repeat="code in codes" >
+						{{code}}
 					</li>
 				</ul>
+			</div>
+			<div class="item">
+				<button class="button button-block button-positive" ng-click="sendCodes()">
+					<i class="icon ion-paper-airplane"></i>
+					Enviar
+				</button>
 			</div>
 		</div>
 	</ion-content>
