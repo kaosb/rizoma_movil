@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $sessionStorage) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $sessionStorage, $localStorage, $location) {
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
 // To listen for when this page is active (for example, to refresh data),
@@ -10,6 +10,8 @@ angular.module('starter.controllers', [])
   
 	// Construyo el elemento que mantendra a la session.
 	$scope.session = $sessionStorage;
+	// Construyo el elemento que mantendra el storage local.
+	$scope.storage = $localStorage;
   
 	// Datos de formulario para el formulario de login.
 	$scope.loginData = {};
@@ -44,6 +46,8 @@ angular.module('starter.controllers', [])
 		}).success(function(data, status, headers, config) {
 			$scope.session.status = status;
 			$scope.session.token = data.token;
+			$scope.storage.status = status;
+			$scope.storage.token = data.token;
 			$scope.closeLogin();
 		}).error(function(data, status, headers, config) {
 			console.log("No fue posible autenticarte.");
@@ -71,8 +75,15 @@ angular.module('starter.controllers', [])
 			console.log("Tu token es: " + $scope.session.token);
 			return true;
 		}else{
-			console.log("La session no existe, es necesario autenticar.");
-			// $scope.login();
+			console.log("La session no existe, es necesario verificar si existe el storage.");
+			if($scope.storage.hasOwnProperty("token")){
+				console.log("Encontre el token en el storage.");
+				$scope.session.token = $scope.storage.token;
+			}else{
+				alert("No se encontro la session, es necesario que te identifiques.");
+				// $scope.login();
+				// $location.path( "/login" );
+			}
 			return false;
 		}
 	};
@@ -80,12 +91,13 @@ angular.module('starter.controllers', [])
 	// Eliminar Session.
 	$scope.deleteSession = function(){
 		$scope.session.$reset();
+		$scope.storage.$reset();
 		$scope.login();
 	};
 
 })
 
-.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
+.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner, $http, $sessionStorage, $localStorage, $location){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
@@ -113,24 +125,26 @@ angular.module('starter.controllers', [])
 
 	// Funcion responsable de enviar los codigos al servidor.
 	$scope.sendCodes = function(){
+		console.log("pase por aqui -> "+$scope.session.token);
 		var data = {
 			"auth_token":$scope.session.token,
 			"transaction_client": "57b9f21a861ca36309000003",
 			"transaction_items_groups": ['57b9f3ef861ca36309000019','57bf3e4f861ca36195000006','57bf3e5f861ca36195000009']
 		}
 		$http({
-			url: "http://app.rizoma.io/api/v1/transactions",
+			url: "http://app.rizoma.io/api/v1/transactions.json",
 			method: "POST",
 			data: data
 		}).success(function(data, status, headers, config) {
-			console.log("Se envio de forma exitosa la carga: "+data);
+			console.log("Se envio de forma exitosa la carga.");
+			$location.path( "/" );
 		}).error(function(data, status, headers, config) {
 			console.log("No se puedo enviar la carga..");
 		});
 	}
 })
 
-.controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
+.controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner, $http, $sessionStorage, $localStorage, $location){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
@@ -149,7 +163,7 @@ angular.module('starter.controllers', [])
 				// Al ser valido lo agrego como positivo.
 				$scope.codes.push(imageData.text);
 			}).error(function(data, status, headers, config){
-				console.log("No fue posible validar el codigo capturado.");
+				alert("No fue posible validar el codigo capturado.");
 			});
 		}, function(error) {
 			// console.log("An error happened -> " + error);
@@ -158,29 +172,35 @@ angular.module('starter.controllers', [])
 
 	// Funcion responsable de enviar los codigos al servidor.
 	$scope.sendCodes = function(){
+		console.log("pase por aqui -> "+$scope.session.token);
 		var data = {
 			"auth_token":$scope.session.token,
 			"transaction_client": "57b9f21a861ca36309000003",
 			"transaction_items_groups": ['57b9f3ef861ca36309000019','57bf3e4f861ca36195000006','57bf3e5f861ca36195000009']
 		}
 		$http({
-			url: "http://app.rizoma.io/api/v1/transactions",
+			url: "http://app.rizoma.io/api/v1/transactions.json",
 			method: "POST",
 			data: data
 		}).success(function(data, status, headers, config) {
-			console.log("Se envio de forma exitosa la carga: "+data);
+			alert("Se envio de forma exitosa la carga.");
+			$location.path( "/" );
 		}).error(function(data, status, headers, config) {
-			console.log("No se puedo enviar la carga..");
+			alert("No se puedo enviar la carga.");
 		});
 	}
 })
 
-.controller('ClientsCtrl', function($scope, $ionicModal, $stateParams) {
+.controller('ClientsCtrl', function($scope, $ionicModal, $stateParams, $http, $sessionStorage, $localStorage) {
 	// Chequeo la session.
-	// $scope.checkSession();
+	$scope.checkSession();
 	// Ejecuto la magia.
 	// $scope.getClients();
-	if($scope.session && $scope.session.clients){
+	console.log($scope.session.token);
+	console.log($scope.session.clients);
+	if($scope.session.hasOwnProperty("token")){
+		console.log("Llamo getClients con: -> "+$scope.session.token);
+		console.log($scope.session);
 		$scope.getClients();
 		$scope.clients = Array();
 		for(i = 0; i < $scope.session.clients.length; i++){
