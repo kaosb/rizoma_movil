@@ -55,19 +55,13 @@ angular.module('starter.controllers', [])
 		$http({
 			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=6DVWNykMaBkHWjHP8hc3",
 			method: "GET"
-		}).success(function(data, status) {
-			console.log(status);
-			console.log(data);
-			// $scope.scans = data;
-			return data;
-		}).error(function(data, status, headers, config) {
-			// $scope.status = status;
-			console.log(data);
-			console.log(status);
-			console.log(headers);
-			console.log(config);
+		}).success(function(data, status){
+			$scope.session.clients = data;
+			// console.log($scope.session.clients);
+			return true;
+		}).error(function(data, status, headers, config){
 			console.log("No fue posible obtener los clientes.");
-			return null;
+			return false;
 		});
 	};
 
@@ -75,33 +69,40 @@ angular.module('starter.controllers', [])
 	$scope.checkSession = function(){
 		if($scope.session.hasOwnProperty("token") && $scope.session.status == 200){
 			console.log($scope.session.token);
-			//$scope.closeLogin();
+			return true;
 		}else{
-			console.log("No existe la session, es necesario autenticar.");
-			$scope.login();
+			console.log("La session no existe, es necesario autenticar.");
+			// $scope.login();
 			// $location.path( "/login" );
+			return false;
 		}
+	}
+
+	// Eliminar Session.
+	$scope.deleteSession = function(){
+		$scope.session.$reset();
+		$scope.login();
 	}
 
 })
 
-.controller('ScansCtrl', function($scope){
+.controller('ScansCtrl', function($scope, $ionicModal){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
-	$scope.scans = $scope.getClients();
-
-	// $scope.scans = [
-	// // 	{ title: 'Cargamento palta', id: 1 },
-	// // 	{ title: 'Cargamento manzana', id: 2 },
-	// // 	{ title: 'El floral', id: 3 },
-	// // 	{ title: 'Mingus', id: 4 },
-	// // 	{ title: 'Cargamento x', id: 5 },
-	// // 	{ title: 'Cargamento xxx', id: 6 }
-	// ];
+	$scope.clients = $scope.getClients();
+	$scope.scans = [
+		{ title: 'Cargamento palta', id: 1 },
+		{ title: 'Cargamento manzana', id: 2 },
+		{ title: 'El floral', id: 3 },
+		{ title: 'Mingus', id: 4 },
+		{ title: 'Cargamento x', id: 5 },
+		{ title: 'Cargamento xxx', id: 6 }
+	];
+	console.log($scope.scans);
 })
 
-.controller("ScanCtrl", function($scope, $cordovaBarcodeScanner){
+.controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
@@ -118,7 +119,7 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller("NewScanCtrl", function($scope, $cordovaBarcodeScanner){
+.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
 	// Chequeo la session.
 	$scope.checkSession();
 	// Ejecuto la magia.
@@ -133,6 +134,17 @@ angular.module('starter.controllers', [])
 			// console.log("An error happened -> " + error);
 		});
 	};
+})
+
+.controller('ClientsCtrl', function($scope, $ionicModal, $stateParams) {
+	// Chequeo la session.
+	$scope.checkSession();
+	// Ejecuto la magia.
+	$scope.getClients();
+	$scope.clients = Array();
+	for(i = 0; i < $scope.session.clients.length; i++){
+		$scope.clients.push({ id: $scope.session.clients[i].id, name: $scope.session.clients[i].name });
+	}
 });
 
 // .controller('ScanCtrl', function($scope, $stateParams) {

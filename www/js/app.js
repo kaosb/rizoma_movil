@@ -7,61 +7,77 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngStorage'])
 
 .run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
+	$ionicPlatform.ready(function() {
+		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+		// for form inputs)
+		if (window.cordova && window.cordova.plugins.Keyboard) {
+			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+			cordova.plugins.Keyboard.disableScroll(true);
+		}
+		if (window.StatusBar) {
+			// org.apache.cordova.statusbar required
+			StatusBar.styleDefault();
+		}
+	});
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
+	$stateProvider
 
-    .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
-  })
+	.state('app', {
+		url: '/app',
+		abstract: true,
+		templateUrl: 'templates/menu.html',
+		controller: 'AppCtrl'
+	})
 
-  .state('app.scans', {
-    url: '/scans',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/scans.html',
-        controller: 'ScansCtrl'
-      }
-    }
-  })
+	.state('app.login', {
+		url: '/login',
+		abstract: true,
+		templateUrl: 'templates/login.html',
+		controller: 'LoginCtrl'
+	})
 
-  .state('app.new', {
-    url: '/scan',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/scan.html',
-        controller: 'NewScanCtrl'
-      }
-    }
-  })
+	.state('app.scans', {
+		url: '/scans',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/scans.html',
+				controller: 'ScansCtrl'
+			}
+		}
+	})
 
-  .state('app.single', {
-    url: '/scans/:scanId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/scan.html',
-        controller: 'ScanCtrl'
-      }
-    }
-  });
+	.state('app.new', {
+		url: '/scan',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/scan.html',
+				controller: 'NewScanCtrl'
+			}
+		}
+	})
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/scans');
+	.state('app.single', {
+		url: '/scans/:scanId',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/scan.html',
+				controller: 'ScanCtrl'
+			}
+		}
+	})
+
+	.state('app.clients', {
+		url: '/clients',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/clients.html',
+				controller: 'ClientsCtrl'
+			}
+		}
+	});
+
+	// Si ninguna ruta concuerda usa esta en su remplazo.
+	$urlRouterProvider.otherwise('/app/clients');
 });
