@@ -48,6 +48,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngStora
 		}
 	})
 
+	.state('app.new', {
+ 		url: '/scan',
+ 		views: {
+ 			'menuContent': {
+ 				templateUrl: 'templates/scan.html',
+ 			controller: 'NewScanCtrl'
+ 			}
+ 		}
+ 	})
+
 	.state('app.clients', {
 		url: '/clients',
 		views: {

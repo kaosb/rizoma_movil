@@ -43,7 +43,8 @@ angular.module('starter.controllers', [])
 			data: data
 		}).success(function(data, status, headers, config) {
 			$scope.session.status = status;
-			$scope.session.token = data.token;
+			// $scope.session.token = data.token;
+			$scope.session.token = "kyqwXT61Hys5xhcd6A6U";
 			$scope.closeLogin();
 		}).error(function(data, status, headers, config) {
 			console.log("No fue posible autenticarte.");
@@ -53,7 +54,7 @@ angular.module('starter.controllers', [])
 	// Obtiene los clientes contra el endpoint de rizoma.
 	$scope.getClients = function(){
 		$http({
-			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=qELVaZPPdpXr-N84hLRq",
+			url: "http://app.rizoma.io/api/v1/clients.json?auth_token=kyqwXT61Hys5xhcd6A6U",
 			method: "GET"
 		}).success(function(data, status){
 			$scope.session.clients = data;
@@ -75,19 +76,36 @@ angular.module('starter.controllers', [])
 			// $location.path( "/login" );
 			return false;
 		}
-	}
+	};
 
 	// Eliminar Session.
 	$scope.deleteSession = function(){
 		$scope.session.$reset();
 		$scope.login();
-	}
+	};
 
+})
+
+.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
+	// Chequeo la session.
+	// $scope.checkSession();
+	// Ejecuto la magia.
+	$scope.codes = []
+	$scope.scanBarcode = function() {
+		$cordovaBarcodeScanner.scan().then(function(imageData){
+			$scope.codes.push(imageData.text);
+			// alert(imageData.text);
+			// console.log("Barcode Format -> " + imageData.format);
+			// console.log("Cancelled -> " + imageData.cancelled);
+		}, function(error) {
+			// console.log("An error happened -> " + error);
+		});
+	};
 })
 
 .controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner){
 	// Chequeo la session.
-	$scope.checkSession();
+	// $scope.checkSession();
 	// Ejecuto la magia.
 	$scope.codes = []
 	$scope.scanBarcode = function() {
@@ -104,8 +122,9 @@ angular.module('starter.controllers', [])
 
 .controller('ClientsCtrl', function($scope, $ionicModal, $stateParams) {
 	// Chequeo la session.
-	$scope.checkSession();
+	// $scope.checkSession();
 	// Ejecuto la magia.
+	$scope.getClients();
 	if($scope.session && $scope.session.clients){
 		$scope.getClients();
 		$scope.clients = Array();
