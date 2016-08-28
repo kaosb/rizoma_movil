@@ -2,7 +2,7 @@
 <widget id="com.ionicframework.rizomascan867092" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>rizoma scan</name>
   <description>
-        Herramienta para capturar codigos QR para trazabilidad de cargas en rizoma.
+        Herramienta para capturar codigos QR para trazabilidad y gestión de stock en rizoma.
     </description>
   <author email="felipe@coddea.com" href="http://www.coddea.com/">
       Felipe I. González G.
