@@ -84,50 +84,54 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner, $http, $localStorage, $location){
-	// Chequeo la session.
-	$scope.checkSession();
-	// Ejecuto la magia.
-	// Array que mantiene los codigos.
-	$scope.codes = []
-	// Funcion responsable de lanzar el escaner.
-	$scope.scanBarcode = function(){
-		$cordovaBarcodeScanner.scan().then(function(imageData){
-			// Verifico si el codigo es valido.
-			$http({
-				url: "http://app.rizoma.io/api/v1/item_group/"+imageData.text+".json?auth_token="+$scope.storage.token,
-				method: "GET"
-			}).success(function(data, status){
-				// Al ser valido lo agrego como positivo.
-				$scope.codes.push(imageData.text);
-			}).error(function(data, status, headers, config){
-				console.log("No fue posible validar el codigo capturado.");
-			});
-		}, function(error) {
-			// console.log("An error happened -> " + error);
-		});
-	};
+// .controller("NewScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner, $http, $localStorage, $location){
+// 	// Chequeo la session.
+// 	$scope.checkSession();
+// 	// Ejecuto la magia.
+// 	// Array que mantiene los codigos.
+// 	$scope.codes = []
+// 	// Funcion responsable de lanzar el escaner.
+// 	$scope.scanBarcode = function(){
+// 		$cordovaBarcodeScanner.scan().then(function(imageData){
+// 			// Verifico si el codigo es valido.
+// 			$http({
+// 				url: "http://app.rizoma.io/api/v1/item_group/"+imageData.text+".json?auth_token="+$scope.storage.token,
+// 				method: "GET"
+// 			}).success(function(data, status){
+// 				// Al ser valido lo agrego como positivo.
+// 				$scope.codes.push(imageData.text);
+// 			}).error(function(data, status, headers, config){
+// 				console.log("No fue posible validar el codigo capturado.");
+// 			});
+// 		}, function(error) {
+// 			// console.log("An error happened -> " + error);
+// 		});
+// 	};
 
-	// Funcion responsable de enviar los codigos al servidor.
-	$scope.sendCodes = function(){
-		console.log("pase por aqui -> "+$scope.storage.token);
-		var data = {
-			"auth_token":$scope.storage.token,
-			"transaction_client": "57b9f21a861ca36309000003",
-			"transaction_items_groups": ['57b9f3ef861ca36309000019','57bf3e4f861ca36195000006','57bf3e5f861ca36195000009']
-		}
-		$http({
-			url: "http://app.rizoma.io/api/v1/transactions.json",
-			method: "POST",
-			data: data
-		}).success(function(data, status, headers, config) {
-			console.log("Se envio de forma exitosa la carga.");
-			$location.path( "/" );
-		}).error(function(data, status, headers, config) {
-			console.log("No se puedo enviar la carga..");
-		});
-	}
-})
+// 	// Funcion responsable de enviar los codigos al servidor.
+// 	$scope.sendCodes = function(){
+// 		console.log("pase por aqui -> "+$scope.storage.token);
+
+// 		console.log($scope.stock);
+
+
+// 		// var data = {
+// 		// 	"auth_token":$scope.storage.token,
+// 		// 	"transaction_client": "57b9f21a861ca36309000003",
+// 		// 	"transaction_items_groups": ['57b9f3ef861ca36309000019','57bf3e4f861ca36195000006','57bf3e5f861ca36195000009']
+// 		// }
+// 		// $http({
+// 		// 	url: "http://app.rizoma.io/api/v1/transactions.json",
+// 		// 	method: "POST",
+// 		// 	data: data
+// 		// }).success(function(data, status, headers, config) {
+// 		// 	console.log("Se envio de forma exitosa la carga.");
+// 		// 	$location.path( "/" );
+// 		// }).error(function(data, status, headers, config) {
+// 		// 	console.log("No se puedo enviar la carga..");
+// 		// });
+// 	}
+// })
 
 .controller("ScanCtrl", function($scope, $ionicModal, $cordovaBarcodeScanner, $http, $localStorage, $location, $stateParams){
 	// Chequeo la session.
@@ -137,6 +141,24 @@ angular.module('starter.controllers', [])
 	$scope.client = $stateParams.clientId;
 	// Array que mantiene los codigos.
 	$scope.codes = Array();
+	$scope.palets = Array();
+
+	// funcion prueba
+	$scope.pruebaCodes = function(){
+		codigo = ['57cf815e861ca3331b000000'];
+		for(i = 0; i < codigo.length; i++){
+			$http({
+				url: "http://app.rizoma.io/api/v1/item_group/"+codigo[i]+".json?auth_token="+$scope.storage.token,
+				method: "GET"
+			}).success(function(data, status){
+				// Al ser valido lo agrego como positivo.
+				$scope.codes.push(data);
+			}).error(function(data, status, headers, config){
+				alert("No fue posible validar el codigo capturado.");
+			});
+		}
+	}
+
 	// Funcion responsable de lanzar el escaner.
 	$scope.scanBarcode = function(){
 		$cordovaBarcodeScanner.scan().then(function(imageData){
@@ -151,19 +173,31 @@ angular.module('starter.controllers', [])
 				alert("No fue posible validar el codigo capturado.");
 			});
 		}, function(error) {
-			// console.log("An error happened -> " + error);
+			console.log("An error happened -> " + error);
 		});
 	};
+
 	// Funcion responsable de enviar los codigos al servidor.
 	$scope.sendCodes = function(){
-		console.log("Envio como token: -> "+$scope.storage.token);
-		console.log("client uid: -> "+$scope.client);
-		console.log("codes: -> "+$scope.codes);
+		var stockFields = document.querySelectorAll("input[name^='stock']");
+		for(i = 0; i < stockFields.length; i++){
+			var paletid = stockFields[i].getAttribute("paletid");
+			var itemid = stockFields[i].getAttribute("itemid");
+			var stock = stockFields[i].value;
+			var obj1 = {};
+			var obj2 = {};
+			obj2[itemid] = stock;
+			obj1[paletid] = obj2;
+			$scope.palets.push(obj1);
+		}
+		// Construyo el objeto a enviar.
 		var data = {
 			"auth_token": $scope.storage.token,
 			"transaction_client": $scope.client,
-			"transaction_items_groups": $scope.codes
+			"transaction_items_groups": $scope.palets
 		}
+		// console.log(data);
+		// Realizo la llamada.
 		$http({
 			url: "http://app.rizoma.io/api/v1/transactions.json",
 			method: "POST",
@@ -175,6 +209,24 @@ angular.module('starter.controllers', [])
 			alert("No se puedo enviar la carga.");
 		});
 	}
+
+	//Funcion responsable de desplegar el detalle de un palet a partir del codigo.
+	$scope.showDetail = function(data){
+		// console.log("showDetail");
+		if($scope.isDetailShown(data)){
+			$scope.shownDetail = null;
+		}else{
+			$scope.shownDetail = data;
+		}
+	}
+
+	// Funcion responsable de determinar si el bloque detalle fue o no activado.
+	$scope.isDetailShown = function(data){
+		var response = $scope.shownDetail === data;
+		// console.log(response);
+		return response;
+	}
+
 })
 
 .controller('ClientsCtrl', function($scope, $ionicModal, $stateParams, $http, $localStorage, $window) {
