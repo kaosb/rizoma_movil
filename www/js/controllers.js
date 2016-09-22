@@ -145,7 +145,7 @@ angular.module('starter.controllers', [])
 
 	// funcion prueba
 	$scope.pruebaCodes = function(){
-		codigo = ['57cf815e861ca3331b000000'];
+		codigo = ['57e36a8b861ca32ac8000005', '57e36aa0861ca32ac8000008', '57e36a76861ca32ac8000002'];
 		for(i = 0; i < codigo.length; i++){
 			$http({
 				url: "http://app.rizoma.io/api/v1/item_group/"+codigo[i]+".json?auth_token="+$scope.storage.token,
@@ -168,7 +168,8 @@ angular.module('starter.controllers', [])
 				method: "GET"
 			}).success(function(data, status){
 				// Al ser valido lo agrego como positivo.
-				$scope.codes.push(imageData.text);
+				// $scope.codes.push(imageData.text);
+				$scope.codes.push(data);
 			}).error(function(data, status, headers, config){
 				alert("No fue posible validar el codigo capturado.");
 			});
@@ -179,17 +180,32 @@ angular.module('starter.controllers', [])
 
 	// Funcion responsable de enviar los codigos al servidor.
 	$scope.sendCodes = function(){
-		var stockFields = document.querySelectorAll("input[name^='stock']");
-		for(i = 0; i < stockFields.length; i++){
-			var paletid = stockFields[i].getAttribute("paletid");
-			var itemid = stockFields[i].getAttribute("itemid");
-			var stock = stockFields[i].value;
+
+		
+		// for(j = 0; j <= $scope.codes.length; j++){
+			// var stockFields = document.querySelectorAll("input[name^='stock'][paletid^='"+$scope.codes[i]+"']");
+			var stockFields = document.querySelectorAll("input[name^='stock']");
+			console.log(stockFields);
 			var obj1 = {};
-			var obj2 = {};
-			obj2[itemid] = stock;
-			obj1[paletid] = obj2;
-			$scope.palets.push(obj1);
-		}
+			for(i = 0; i < stockFields.length; i++){
+				var paletid = stockFields[i].getAttribute("paletid");
+				var itemid = stockFields[i].getAttribute("itemid");
+				var stock = stockFields[i].value;
+				var obj2 = {};
+				obj2[itemid] = stock;
+				if(obj1[paletid] instanceof Array){
+					obj1[paletid].push(obj2);
+				}else{
+					obj1[paletid] = Array();
+					obj1[paletid].push(obj2);
+				}
+			}
+			console.log(obj1);
+			// $scope.palets.push(obj1);
+			 $scope.palets = obj1;
+		// }
+
+
 		// Construyo el objeto a enviar.
 		var data = {
 			"auth_token": $scope.storage.token,
