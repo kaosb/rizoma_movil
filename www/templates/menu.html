@@ -16,18 +16,20 @@
 		</ion-header-bar>
 		<ion-content>
 			<ion-list >
+				<!-- No logeado -->
 				<ion-item ng-if="!storage.token" menu-close ng-click="login()">
 					Identificarse
+				</ion-item>
+				<!-- Logeado -->
+				<ion-item menu-close href="#/app/clients">
+					Escanear pallet
+				</ion-item>
+				<ion-item menu-close href="#/app/scan">
+					Crear pallet a partir de otro
 				</ion-item>
 				<ion-item ng-if="storage.token" menu-close ng-click="deleteSession()">
 					Salir
 				</ion-item>
-<!-- 				<ion-item menu-close href="#/app/clients">
-					Clientes
-				</ion-item>
-				<ion-item menu-close href="#/app/scan">
-					Escanear
-				</ion-item> -->
 			</ion-list>
 		</ion-content>
 	</ion-side-menu>
