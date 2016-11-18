@@ -48,12 +48,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngStora
 		}
 	})
 
-	.state('app.new', {
- 		url: '/scan',
+	.state('app.newfromother', {
+ 		url: '/newfromother',
  		views: {
  			'menuContent': {
- 				templateUrl: 'templates/scan.html',
- 			controller: 'NewScanCtrl'
+ 				templateUrl: 'templates/newfromother.html',
+ 			controller: 'NewFromOther'
  			}
  		}
  	})

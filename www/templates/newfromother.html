@@ -1,0 +1,49 @@
+<ion-view view-title="Escaner">
+	<ion-content style="background: #e8ebf1;" class="padding">
+		<div ng-show="codes.length == 0" class="card">
+			<div class="item">
+				<button class="button button-block button-positive" ng-click="pruebaCodes()">
+					<i class="icon ion-qr-scanner"></i>
+					Escanea ahora
+				</button>
+			</div>
+		</div>
+		<div class="card">
+			<div class="item item-divider">
+				Codigos escaneados
+			</div>
+			<div class="item item-text-wrap">
+				<ion-list>
+					<ion-item ng-repeat="data in codes" class="item item-text-wrap">
+						<ion-label>
+							<h2>{{data.code}}</h2>
+							<p style="font-size: 13px;" >{{data.packing_date}}</p>
+						</ion-label>
+						<div ng-if="data.items_available.length > 0" ng-click="showDetail(data._id.$oid);" style="position: absolute; right: 2px; top:32px;">
+							<i ng-class="isDetailShown(data._id.$oid) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+							{{ isDetailShown(data._id.$oid) ? 'Ocultar' : 'Detalle' }}
+						</div>
+						<div ng-show="isDetailShown(data._id.$oid)" ng-class="isDetailShown(data._id.$oid) ? 'item-expand active' : 'item-expand inactive'">
+						<div ng-repeat="item in data.items_available" >
+							<br/>
+							<hr>
+							<p>{{item.assortment}} - {{item.product}}</p>
+							<p>{{item.producer}}</p>
+							<p>{{item.caliber}}</p>
+							<p ng-if="itemvalue[item.id]">{{itemvalue[item.id].quantity}} - {{item.stock}}</p>
+							<p ng-if="!itemvalue[item.id]">0 - {{item.stock}}</p>
+							<input type="range" name="range" min="0" max="{{item.stock}}" paletid="{{data._id.$oid}}" itemid="{{item.id}}" value="0" step="1" ng-model="itemvalue[item.id]['quantity']">
+						</div>
+						</div>
+					</ion-item>
+				</ion-list>
+			</div>
+			<div ng-show="codes.length" class="item">
+				<button class="button button-block button-positive" ng-click="createPanelFromOther(codes)">
+					<i class="icon ion-paper-airplane"></i>
+					Enviar
+				</button>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
