@@ -284,7 +284,7 @@ angular.module('starter.controllers', [])
 		}
 		// Realizo la llamada.
 		$http({
-			url: "http://app.rizoma.io/api/v1/"+codes[0]._id.$oid+"/create_item_group_from_other.json",
+			url: "http://app.rizoma.io/api/v1/item_group/"+codes[0]._id.$oid+"/create_item_group_from_other.json",
 			method: "POST",
 			data: data
 		}).success(function(data, status, headers, config) {
