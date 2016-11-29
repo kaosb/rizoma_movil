@@ -200,7 +200,7 @@ angular.module('starter.controllers', [])
 		$cordovaBarcodeScanner.scan().then(function(imageData){
 			// Verifico si el codigo es valido.
 			$http({
-				url: "http://app.rizoma.io/api/v1/item_group/"+imageData.text+".json?auth_token="+$scope.storage.token,
+				url: "http://app.rizoma.io/api/v1/item_group/"+imageData.text+"/validate.json?auth_token="+$scope.storage.token,
 				method: "GET"
 			}).success(function(data, status){
 				// Al ser valido lo agrego como positivo.
